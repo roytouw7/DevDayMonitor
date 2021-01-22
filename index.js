@@ -11,10 +11,19 @@ app.get('/', (req, res) => {
   res.sendFile(__dirname + '/index.html');
 });
 
+let monitor;
+
 io.on('connection', (socket) => {
-    console.log('connected');   
+    console.log('connected');
+    socket.on('monitor', () => {
+        monitor = socket;
+    });
+
     socket.on('chat message', msg => {
         io.emit('chat message', msg);
+        // if (monitor) {
+        //     monitor.emit(msg);
+        // }
         console.log(msg)
     });
 });
